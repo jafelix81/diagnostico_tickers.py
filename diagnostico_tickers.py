@@ -240,5 +240,74 @@ for ticker in TICKERS:
 
 print("\n\n")
 print("#" * 80)
+# ============================================================
+# 5. PRUEBA CON FECHAS EXPLÍCITAS
+# ============================================================
+
+print("\n\n")
+print("#" * 80)
+print("5) PRUEBA CON FECHAS EXPLÍCITAS")
+print("#" * 80)
+
+START_DATE = "2016-01-01"
+END_DATE = "2026-10-08"
+
+for ticker in TICKERS:
+
+    print("\n" + "=" * 70)
+    print(f"{ticker} — START/END EXPLÍCITOS")
+    print("=" * 70)
+
+    try:
+
+        stock = yf.Ticker(ticker)
+
+        data = stock.history(
+            start=START_DATE,
+            end=END_DATE,
+            interval="1d",
+            auto_adjust=False
+        )
+
+        print(f"Shape: {data.shape}")
+        print(f"Columnas: {list(data.columns)}")
+
+        if data.empty:
+            print("RESULTADO: DATAFRAME VACÍO")
+            continue
+
+        if "Close" not in data.columns:
+            print("RESULTADO: NO EXISTE CLOSE")
+            continue
+
+        close = pd.to_numeric(
+            data["Close"],
+            errors="coerce"
+        ).dropna()
+
+        print(f"Observaciones Close válidas: {len(close)}")
+
+        if len(close) > 0:
+            print(f"Primera fecha: {close.index.min()}")
+            print(f"Última fecha:  {close.index.max()}")
+            print(f"Primer Close: {close.iloc[0]}")
+            print(f"Último Close:  {close.iloc[-1]}")
+
+        if len(close) >= 260:
+            print(">>> RESULTADO: OK")
+        else:
+            print(">>> RESULTADO: INSUFICIENTE")
+
+    except Exception as e:
+
+        print(f"ERROR: {type(e).__name__}: {e}")
+
+    time.sleep(1)
+
+
+print("\n")
+print("#" * 80)
+print("FIN DEL DIAGNÓSTICO")
+print("#" * 80)
 print("FIN DEL DIAGNÓSTICO")
 print("#" * 80)
