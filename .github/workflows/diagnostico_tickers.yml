@@ -1,0 +1,25 @@
+name: Diagnostico Tickers CERE
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnostico:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias
+        run: |
+          pip install yfinance pandas numpy
+
+      - name: Ejecutar diagnóstico
+        run: |
+          python diagnostico_tickers.py
